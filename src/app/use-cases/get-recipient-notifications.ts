@@ -4,6 +4,8 @@ import { Notification } from '../entities/notification';
 
 interface GetRecipientNotificationsRequest {
   recipientId: string;
+  page: number;
+  limit: number;
 }
 
 interface GetRecipientNotificationsResponse {
@@ -12,13 +14,18 @@ interface GetRecipientNotificationsResponse {
 
 @Injectable()
 export class GetRecipientNotifications {
-  constructor(private notificationsRepository: NotificationsRepository) {}
+  constructor(private repository: NotificationsRepository) {}
 
   async execute({
     recipientId,
+    page,
+    limit,
   }: GetRecipientNotificationsRequest): Promise<GetRecipientNotificationsResponse> {
-    const notifications =
-      await this.notificationsRepository.findManyByRecipientId(recipientId);
+    const notifications = await this.repository.findManyByRecipientId({
+      recipientId,
+      page,
+      limit,
+    });
 
     if (notifications.length === 0) {
       return {

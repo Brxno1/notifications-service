@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { NotificationsRepository } from '@/app/repositories/notifications';
+import {
+  FindManyByRecipientIdProps,
+  NotificationsRepository,
+} from '@/app/repositories/notifications';
 import { Notification } from '@/app/entities/notification';
 import { PrismaNotificationMapper } from '../mapppers/prisma-notification';
 @Injectable()
 export class PrismaNotificationsRepository implements NotificationsRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async findById(notificationId: string): Promise<Notification | null> {
     const notification = await this.prisma.notification.findUnique({
@@ -19,12 +22,18 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     return PrismaNotificationMapper.toDomain(notification);
   }
 
-  async findManyByRecipientId(recipientId: string): Promise<Notification[]> {
+  async findManyByRecipientId({
+    recipientId,
+    page = 1,
+    limit = 10,
+  }: FindManyByRecipientIdProps): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
       where: { recipientId },
       orderBy: {
         createdAt: 'desc',
       },
+      take: limit,
+      skip: (page - 1) * limit,
     });
 
     return notifications.map((notification) =>
@@ -44,7 +53,7 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     const raw = PrismaNotificationMapper.toPrisma(notification);
 
     await this.prisma.notification.upsert({
-      where: { id: notification.id },
+      where: { id: raw.id },
       update: raw,
       create: raw,
     });

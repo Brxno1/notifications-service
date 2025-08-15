@@ -3,11 +3,10 @@ import { NotificationsRepository } from '../repositories/notifications';
 
 @Injectable()
 export class CountRecipientNotifications {
-  constructor(private notificationsRepository: NotificationsRepository) {}
+  constructor(private repository: NotificationsRepository) {}
 
   async execute(recipientId: string): Promise<number> {
-    const count =
-      await this.notificationsRepository.countByRecipientId(recipientId);
+    const count = await this.repository.countByRecipientId(recipientId);
 
     return count;
   }

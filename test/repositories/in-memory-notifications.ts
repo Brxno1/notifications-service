@@ -1,15 +1,24 @@
 import { Notification } from '@/app/entities/notification';
-import { NotificationsRepository } from '@/app/repositories/notifications';
+import {
+  FindManyByRecipientIdProps,
+  NotificationsRepository,
+} from '@/app/repositories/notifications';
 
 export class InMemoryNotificationsRepository
   implements NotificationsRepository
 {
   public notifications: Notification[] = [];
 
-  async findManyByRecipientId(recipientId: string): Promise<Notification[]> {
-    return this.notifications.filter(
-      (notification) => notification.recipientId === recipientId,
-    );
+  async findManyByRecipientId({
+    recipientId,
+    page = 1,
+    limit = 10,
+  }: FindManyByRecipientIdProps): Promise<Notification[]> {
+    const notifications = this.notifications
+      .filter((notification) => notification.recipientId === recipientId)
+      .slice((page - 1) * limit, (page - 1) * limit + limit);
+
+    return notifications;
   }
 
   async findById(notificationId: string): Promise<Notification | null> {

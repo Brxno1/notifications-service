@@ -9,31 +9,38 @@ describe('Get recipient notifications', () => {
 
     await repository.create(
       makeNotification({
-        recipientId: 'example-recipient-id',
+        recipientId: 'example-recipient-id-1',
       }),
     );
 
     await repository.create(
       makeNotification({
-        recipientId: 'example-recipient-id',
+        recipientId: 'example-recipient-id-1',
       }),
     );
 
     await repository.create(
       makeNotification({
-        recipientId: 'example-recipient-id',
+        recipientId: 'example-recipient-id-2',
       }),
     );
 
     const { notifications } = await getRecipientNotifications.execute({
-      recipientId: 'example-recipient-id',
+      recipientId: 'example-recipient-id-1',
+      page: 1,
+      limit: 10,
     });
 
-    expect(notifications).toHaveLength(3);
-    expect(notifications[0]).toEqual(
-      expect.objectContaining({
-        recipientId: 'example-recipient-id',
-      }),
+    expect(notifications).toHaveLength(2);
+    expect(notifications).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          recipientId: 'example-recipient-id-1',
+        }),
+        expect.objectContaining({
+          recipientId: 'example-recipient-id-1',
+        }),
+      ]),
     );
   });
 });

@@ -3,7 +3,6 @@ import { Content } from './content';
 import { randomUUID } from 'node:crypto';
 
 export interface NotificationProps {
-  id?: string;
   recipientId: string;
   content: Content;
   category: string;
@@ -13,13 +12,14 @@ export interface NotificationProps {
 }
 
 export class Notification {
-  private _id: string;
+  private readonly _id: string;
   private props: NotificationProps;
 
   constructor(
-    props: Replace<NotificationProps, { createdAt?: Date; id?: string }>,
+    props: Replace<NotificationProps, { createdAt?: Date }>,
+    id?: string,
   ) {
-    this._id = props.id ?? randomUUID();
+    this._id = id ?? randomUUID();
     this.props = {
       ...props,
       createdAt: props.createdAt ?? new Date(),
@@ -54,8 +54,12 @@ export class Notification {
     return this.props.category;
   }
 
-  public set readAt(readAt: Date) {
-    this.props.readAt = readAt;
+  public read() {
+    this.props.readAt = new Date();
+  }
+
+  public unread() {
+    this.props.readAt = null;
   }
 
   public get readAt(): Date | null | undefined {

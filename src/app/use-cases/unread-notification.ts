@@ -3,7 +3,7 @@ import { NotificationsRepository } from '@/app/repositories/notifications';
 import { NotificationNotFound } from './errors/notification-not-found';
 
 @Injectable()
-export class CancelNotification {
+export class UnreadNotification {
   constructor(private repository: NotificationsRepository) {}
 
   async execute(notificationId: string): Promise<void> {
@@ -13,7 +13,7 @@ export class CancelNotification {
       throw new NotificationNotFound();
     }
 
-    notification.cancel();
+    notification.unread();
 
     await this.repository.save(notification);
   }
