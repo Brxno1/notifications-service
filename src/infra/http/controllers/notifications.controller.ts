@@ -6,6 +6,7 @@ import {
   Param,
   Get,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateNotificationBody } from '../dtos/create-notification-body';
 import { SendNotification } from '@/app/use-cases/send-notification';
@@ -16,8 +17,10 @@ import {
 } from '../view-models/notifications';
 import { GetRecipientNotifications } from '@/app/use-cases/get-recipient-notifications';
 import { CountRecipientNotifications } from '@/app/use-cases/count-recipient-notifications';
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard';
 
 @Controller('/notifications')
+@UseGuards(JwtAuthGuard)
 export class NotificationsController {
   constructor(
     private readonly sendNotification: SendNotification,
