@@ -3,11 +3,17 @@ import { NotificationsController } from './controllers/notifications.controller'
 import { SendNotification } from '@/app/use-cases/send-notification';
 import { CancelNotification } from '@/app/use-cases/cancel-notifications';
 import { DatabaseModule } from '../database/database.module';
-import { GetNotification } from '@/app/use-cases/get-notification';
+import { GetRecipientNotifications } from '@/app/use-cases/get-recipient-notifications';
+import { CountRecipientNotifications } from '@/app/use-cases/count-recipient-notifications';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [NotificationsController],
-  providers: [SendNotification, CancelNotification, GetNotification],
+  providers: [
+    SendNotification,
+    CancelNotification,
+    GetRecipientNotifications,
+    CountRecipientNotifications,
+  ],
 })
-export class HttpModule {}
+export class HttpModule { }

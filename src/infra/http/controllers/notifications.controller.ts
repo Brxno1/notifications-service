@@ -6,21 +6,23 @@ import {
   NotificationViewModel,
   NotificationViewModelProps,
 } from '../view-models/notifications';
-import { GetNotification } from '@/app/use-cases/get-notification';
+import { GetRecipientNotifications } from '@/app/use-cases/get-recipient-notifications';
+import { CountRecipientNotifications } from '@/app/use-cases/count-recipient-notifications';
 
 @Controller('/notifications')
 export class NotificationsController {
   constructor(
     private sendNotification: SendNotification,
     private cancelNotification: CancelNotification,
-    private getNotification: GetNotification,
-  ) {}
+    private GetRecipientNotifications: GetRecipientNotifications,
+    private countRecipientNotifications: CountRecipientNotifications,
+  ) { }
 
   @Get('/:recipientId/list')
-  async handleGetNotifications(
+  async handleGetRecipientNotifications(
     @Param('recipientId') recipientId: string,
   ): Promise<{ notifications: NotificationViewModelProps[] }> {
-    const { notifications } = await this.getNotification.execute({
+    const { notifications } = await this.GetRecipientNotifications.execute({
       recipientId,
     });
 
@@ -50,8 +52,15 @@ export class NotificationsController {
 
   @Patch(':id/cancel')
   async handleCancelNotification(@Param('id') id: string): Promise<void> {
-    await this.cancelNotification.execute({
-      notificationId: id,
-    });
+    await this.cancelNotification.execute(id);
+  }
+
+  @Get('/:recipientId/count')
+  async handleCountNotifications(
+    @Param('recipientId') recipientId: string,
+  ): Promise<{ count: number }> {
+    const count = await this.countRecipientNotifications.execute(recipientId);
+
+    return { count };
   }
 }

@@ -2,32 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { NotificationsRepository } from '@/app/repositories/notifications';
 import { Notification } from '../entities/notification';
 
-interface GetNotificationRequest {
+interface GetRecipientNotificationsRequest {
   recipientId: string;
 }
 
-interface GetNotificationResponse {
+interface GetRecipientNotificationsResponse {
   notifications: Notification[];
 }
 
 @Injectable()
-export class GetNotification {
+export class GetRecipientNotifications {
   constructor(private notificationsRepository: NotificationsRepository) {}
 
   async execute({
     recipientId,
-  }: GetNotificationRequest): Promise<GetNotificationResponse> {
+  }: GetRecipientNotificationsRequest): Promise<GetRecipientNotificationsResponse> {
     const notifications =
-      await this.notificationsRepository.findByRecipientId(recipientId);
+      await this.notificationsRepository.findManyByRecipientId(recipientId);
 
-    if (!notifications) {
+    if (notifications.length === 0) {
       return {
         notifications: [],
       };
     }
 
-    return {
-      notifications,
-    };
+    return { notifications };
   }
 }
