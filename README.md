@@ -105,11 +105,17 @@ pnpm start:prod
 # Start complete environment (app only)
 pnpm docker:up
 
+# Stop environment temporarily (containers remain)
+pnpm docker:stop
+
+# Resume stopped environment
+pnpm docker:start
+
+# Stop and remove containers completely
+pnpm docker:down
+
 # View logs in real-time
 pnpm docker:logs
-
-# Stop environment
-pnpm docker:down
 ```
 
 ### Manual Build
@@ -134,7 +140,13 @@ docker-compose up --build
 # Run in background
 docker-compose up -d
 
-# Stop containers
+# Stop containers temporarily
+docker-compose stop
+
+# Start containers
+docker-compose start
+
+# Stop and remove containers
 docker-compose down
 
 # View specific logs

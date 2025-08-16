@@ -21,7 +21,9 @@
     "docker:build": "docker build --target development -t app:dev .",
     "docker:run": "docker run --name app -p 3333:3333 --rm app:dev",
     "docker:up": "docker-compose up --build",
+    "docker:start": "docker-compose start",
     "docker:down": "docker-compose down",
+    "docker:stop": "docker-compose stop",
     "docker:logs": "docker-compose logs -f"
   },
   "dependencies": {
