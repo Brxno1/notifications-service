@@ -6,4 +6,4 @@ import { AuthModule } from './infra/auth/auth.module';
 @Module({
   imports: [HttpModule, DatabaseModule, AuthModule],
 })
-export class AppModule { }
+export class AppModule {}

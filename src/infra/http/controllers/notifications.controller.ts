@@ -1,12 +1,12 @@
 import {
   Body,
   Controller,
-  Patch,
   Post,
   Param,
   Get,
   Query,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { CreateNotificationBody } from '../dtos/create-notification-body';
 import { SendNotification } from '@/app/use-cases/send-notification';
@@ -68,7 +68,7 @@ export class NotificationsController {
     };
   }
 
-  @Patch(':id/cancel')
+  @Put(':id/cancel')
   async cancelById(@Param('id') id: string): Promise<void> {
     await this.cancelNotification.execute(id);
   }
