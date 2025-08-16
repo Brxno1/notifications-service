@@ -97,6 +97,62 @@ pnpm build
 pnpm start:prod
 ```
 
+## 🐳 Docker
+
+### Development
+
+```bash
+# Start complete environment (app only)
+pnpm docker:up
+
+# View logs in real-time
+pnpm docker:logs
+
+# Stop environment
+pnpm docker:down
+```
+
+### Manual Build
+
+```bash
+# Build image
+pnpm docker:build
+
+# Run standalone container
+pnpm docker:run
+```
+
+### Direct Docker Commands
+
+```bash
+# Build image
+docker build -t app .
+
+# Run in development mode
+docker-compose up --build
+
+# Run in background
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+
+# View specific logs
+docker-compose logs -f app
+```
+
+### Production
+
+```bash
+# Build for production (optimized and secure image)
+docker build --target production -t app:prod .
+
+# Run production
+docker run -p 3333:3333 app:prod
+```
+
+The app will be available at `http://localhost:3333` when running via Docker.
+
 ## 🧪 Testing
 
 ```bash
